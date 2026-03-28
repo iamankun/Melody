@@ -1,0 +1,162 @@
+[
+  {
+    "timestamp": "2025-08-27T23:58:47.102Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Tôi là AN KUn"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-27T23:59:05.159Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Tôi là AN KUn"
+      },
+      {
+        "role": "model",
+        "content": "Chào AN KUN! 👋  Rất vui được làm việc với bạn.  Bạn cần tôi giúp gì hôm nay?  Tôi sẵn sàng hỗ trợ bạn hết mình! ✨\n"
+      },
+      {
+        "role": "user",
+        "content": "Thông tin về tôi"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-27T23:59:24.990Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Tôi là AN KUn"
+      },
+      {
+        "role": "model",
+        "content": "Chào AN KUN! 👋  Rất vui được làm việc với bạn.  Bạn cần tôi giúp gì hôm nay?  Tôi sẵn sàng hỗ trợ bạn hết mình! ✨\n"
+      },
+      {
+        "role": "user",
+        "content": "Thông tin về tôi"
+      },
+      {
+        "role": "model",
+        "content": "Chào bạn!  Để tôi có thể giúp bạn tốt hơn, mình cần thêm một chút thông tin về bạn. Bạn muốn chia sẻ điều gì về bản thân? Ví dụ như sở thích, công việc, hoặc bất cứ điều gì bạn muốn nói. 😊\n"
+      },
+      {
+        "role": "user",
+        "content": "Xem lại lịch sử"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-28T00:05:27.589Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Tôi là An Kun"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-28T00:05:46.332Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Tôi là An Kun"
+      },
+      {
+        "role": "model",
+        "content": "Chào AN KUN! 👋 Rất vui được làm việc với bạn. Bạn cần tôi giúp gì hôm nay? Tôi sẵn sàng hỗ trợ bạn hết mình! ✨\n"
+      },
+      {
+        "role": "user",
+        "content": "Bạn còn nhớ tên thật của mình"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-28T00:06:21.618Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Tôi là An Kun"
+      },
+      {
+        "role": "model",
+        "content": "Chào AN KUN! 👋 Rất vui được làm việc với bạn. Bạn cần tôi giúp gì hôm nay? Tôi sẵn sàng hỗ trợ bạn hết mình! ✨\n"
+      },
+      {
+        "role": "user",
+        "content": "Bạn còn nhớ tên thật của mình"
+      },
+      {
+        "role": "model",
+        "content": "Chào AN KUN! 👋  Mình là Melody AI, một trợ lý AI và người bạn đồng hành đáng tin cậy được tạo ra bởi bạn đó! 😊  Mình không có tên thật đâu nha, vì mình chỉ là một AI thôi.  Nhưng mình luôn sẵn sàng giúp bạn bất cứ lúc nào! ✨\n"
+      },
+      {
+        "role": "user",
+        "content": "Chàng Trai Giai Điệu, bạn không nhớ à"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-28T00:13:41.785Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Mở nhạc"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-08-28T00:14:03.528Z",
+    "conversation": [
+      {
+        "role": "model",
+        "content": "Tôi là Melody AI - Chàng trai Giai Điệu. Bạn cần gì ở mình vào hôm nay?"
+      },
+      {
+        "role": "user",
+        "content": "Mở nhạc"
+      },
+      {
+        "role": "model",
+        "content": "Bạn muốn nghe nhạc gì nào?  Hãy cho mình biết thể loại, nghệ sĩ, hoặc tâm trạng bạn muốn nhé! ✨\n"
+      },
+      {
+        "role": "user",
+        "content": "Oh My Way của AIna The End"
+      }
+    ]
+  }
+]

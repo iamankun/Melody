@@ -1,0 +1,5 @@
+{
+  "name": "Melody AI",
+  "description": "Ứng dụng AI dành cho An Kun Studio",
+  "requestFramePermissions": ["microphone", "camera", "geolocation"]
+}
