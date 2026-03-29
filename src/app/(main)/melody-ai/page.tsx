@@ -19,6 +19,7 @@ import { useMusicPlayer } from '@/contexts/MusicContext';
 import { AudioRecorder } from '@/components/features/audio-recorder';
 import { identifySongFromAudio } from '@/ai/flows/identify-song-from-audio';
 import { transcribeAudio } from '@/ai/flows/transcribe-audio';
+import { ModelSelector } from '@/components/ai/model-selector';
 
 const formSchema = z.object({
   prompt: z.string().min(1, { message: "Tin nhắn không được để trống." }),
@@ -38,6 +39,7 @@ export default function MelodyAIChatPage() {
   const [isChatActive, setIsChatActive] = useState(false);
   const [isAnKun, setIsAnKun] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [selectedModel, setSelectedModel] = useState('ollama/llama3');
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const promptTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -131,7 +133,7 @@ export default function MelodyAIChatPage() {
         role: m.role,
         content: m.content,
       }));
-      const output = await chat({ history, prompt: prompt, isAnKun: anKunFlag, generateAudio });
+      const output = await chat({ history, prompt: prompt, isAnKun: anKunFlag, generateAudio, model: selectedModel });
 
       const modelMessage: Message = { role: "model", content: output.response, audio: output.audio };
       // Replace the thinking indicator with the actual response
@@ -327,6 +329,12 @@ export default function MelodyAIChatPage() {
                     onTranscriptionComplete={handleTranscription} 
                     isSubmitting={isSubmitting}
                     onPermissionDenied={handleMicPermissionDenied}
+                />
+                <ModelSelector 
+                  selectedModel={selectedModel}
+                  onModelChange={setSelectedModel}
+                  disabled={isSubmitting}
+                  className="w-48"
                 />
                  <AudioRecorder
                     mode="identify"

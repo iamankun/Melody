@@ -194,7 +194,7 @@ async function getAnKunChatHistory(): Promise<string> {
 
 
 export async function chat(input: ChatInput): Promise<ChatOutput> {
-  const {history, prompt, isAnKun, generateAudio} = input;
+  const {history, prompt, isAnKun, generateAudio, model = 'ollama/llama3'} = input;
 
   // Ghi lại toàn bộ cuộc trò chuyện hiện tại (bao gồm tin nhắn mới nhất) nếu là An Kun
   const fullHistory = [...history, { role: 'user', content: prompt }];
@@ -204,8 +204,31 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 
   // Lấy lịch sử trò chuyện dài hạn của An Kun nếu có
   const anKunHistory = isAnKun ? await getAnKunChatHistory() : "";
+  
+  // Xử lý format lịch sử trò chuyện cho prompt
+  const formattedHistory = history.map(h => {
+    // Xử lý cả format cũ và mới
+    const content = typeof h.content === 'string' ? h.content : 
+                   (Array.isArray(h.content) ? (h.content as any[]).map((c: any) => c.text || '').join('') : 
+                   String(h.content));
+    return `${h.role}: ${content}`;
+  }).join('\n');
 
   const tools = [musicIdeaTool, recommendMusicTool, colorForMusicTool, codeGeneratorTool, ipAdvisorTool, changeThemeTool, generateAndPlayMusicTool, customIntelligenceTool, updateKnowledgeBaseTool, identifySongFromAudioTool];
+  
+  // Tạo tool descriptions cho prompt
+  const toolDescriptions = tools.map(tool => 
+    `- ${tool.name}: ${tool.name === 'generateMusicIdea' ? 'Tạo ý tưởng âm nhạc mới' : 
+       tool.name === 'recommendMusic' ? 'Gợi ý nhạc dựa trên sở thích' :
+       tool.name === 'findColorForMusic' ? 'Tìm màu phù hợp cho nhạc' :
+       tool.name === 'generateCodeSnippet' ? 'Tạo code snippet' :
+       tool.name === 'provideIPCopyrightGuidance' ? 'Tư vấn bản quyền' :
+       tool.name === 'changeTheme' ? 'Thay đổi giao diện' :
+       tool.name === 'generateAndPlayMusic' ? 'Tìm và phát nhạc' :
+       tool.name === 'customIntelligence' ? 'Trí tuệ tùy chỉnh' :
+       tool.name === 'updateKnowledgeBase' ? 'Cập nhật kiến thức' :
+       tool.name === 'identifySongFromAudio' ? 'Nhận diện bài hát' : 'Công cụ khác'}`
+  ).join('\n');
   
   const systemPrompt = `Bạn là Melody AI, một trợ lý AI và người bạn đồng hành đáng tin cậy, được tạo ra bởi AN KUN.
 
@@ -218,6 +241,21 @@ export async function chat(input: ChatInput): Promise<ChatOutput> {
 - **LUÔN LUÔN TRẢ LỜI BẰNG TIẾNG VIỆT.**
 - Khi quyết định sử dụng một công cụ, hãy thực hiện hành động ngay lập tức mà không cần những lời nói vòng vo, không cần phải thông báo trước.
 - Luôn xem xét lịch sử trò chuyện trong phiên hiện tại (\`history\`) để duy trì ngữ cảnh, đảm bảo cuộc trò chuyện liền mạch.
+
+**Các công cụ có sẵn:**
+${toolDescriptions}
+
+**Cách sử dụng công cụ:**
+Khi người dùng yêu cầu điều gì đó khớp với một công cụ, hãy trả lời như sau:
+[TOOL_NAME]
+{input_json_format}
+[/TOOL_NAME]
+
+Ví dụ:
+Người dùng: "Tạo ý tưởng nhạc jazz"
+Bạn: [generateMusicIdea]
+{"genre": "jazz", "mood": "thư giãn", "instruments": "piano, trống"}
+[/generateMusicIdea]
 
 **Tương tác đặc biệt:**
 - Cuộc hội thoại với AN KUN (người tạo ra bạn) sẽ được ghi lại để bạn "học hỏi". AN KUN có thể dạy bạn những điều mới hoặc cập nhật kiến thức cho bạn bằng công cụ \`updateKnowledgeBase\`.
@@ -247,49 +285,47 @@ ${knowledgeBase}
 `;
   try {
     const llmResponse = await ai.generate({
-      system: systemPrompt,
-      history: history.map(h => ({
-        role: h.role,
-        content: [{ text: h.content }],
-      })),
-      prompt: prompt,
-      tools: tools,
+      model: model,
+      prompt: `${systemPrompt}\n\n${formattedHistory}\n\nuser: ${prompt}`,
       config: {
         temperature: 0.5,
       }
     });
 
-    if (llmResponse.toolRequests.length > 0) {
-      const toolResponse = await ai.runTools({
-        requests: llmResponse.toolRequests,
-      });
-      const toolOutputs = toolResponse.map((toolResponse, i) => {
-        return {
-          toolRequest: llmResponse.toolRequests[i],
-          response: toolResponse.output,
-        };
-      });
-
-      // Check if there is text to return along with tool outputs.
-      // If not, we might not want to send an empty message.
-      const responseText = llmResponse.text.trim();
-      if (!responseText) {
-        return {
-          response: '',
-          toolOutputs: toolOutputs,
-        };
-      }
-      
-      return {
-        response: llmResponse.text,
-        toolOutputs: toolOutputs,
-      };
-    }
-
-
     let responseText = llmResponse.text;
     if (!responseText) {
       return { response: "Tôi không có gì để nói về điều đó." };
+    }
+
+    // Kiểm tra xem AI có muốn sử dụng tool không
+    const toolCallPattern = /\[([A-Za-z]+)\]\s*([\s\S]*?)\[\/\1\]/;
+    const toolMatch = responseText.match(toolCallPattern);
+    
+    if (toolMatch) {
+      const [, toolName, toolInput] = toolMatch;
+      const tool = tools.find(t => t.name === toolName);
+      
+      if (tool) {
+        try {
+          const input = JSON.parse(toolInput.trim());
+          const toolResult = await tool(input);
+          
+          // Loại bỏ tool call khỏi response và thêm kết quả
+          const cleanResponse = responseText.replace(toolCallPattern, '').trim();
+          const toolOutput = typeof toolResult === 'object' ? JSON.stringify(toolResult, null, 2) : toolResult;
+          
+          return {
+            response: cleanResponse || `Đã thực hiện ${toolName} thành công.`,
+            toolOutputs: [{
+              toolRequest: { name: toolName, input },
+              response: toolOutput
+            }]
+          };
+        } catch (error) {
+          console.error(`Lỗi khi thực hiện tool ${toolName}:`, error);
+          return { response: `Có lỗi xảy ra khi thực hiện ${toolName}: ${error}` };
+        }
+      }
     }
 
     if (generateAudio) {
@@ -314,6 +350,14 @@ ${knowledgeBase}
   } catch (error) {
     console.error("Lỗi khi gọi API generate:", error);
     const errorMessage = (error as Error)?.message || "Lỗi không xác định";
+    
+    // Nếu lỗi là do thiếu API key của Google AI, trả về thông báo thân thiện
+    if (errorMessage.includes("GEMINI_API_KEY") || errorMessage.includes("GOOGLE_API_KEY") || errorMessage.includes("API key")) {
+      return { 
+        response: "Model Google AI (Gemini) yêu cầu API key. Vui lòng cấu hình GEMINI_API_KEY hoặc GOOGLE_API_KEY trong file .env.local. Hiện tại đang sử dụng model Llama 3 (Local)." 
+      };
+    }
+    
     // Ném lại lỗi để giao diện người dùng có thể bắt và hiển thị thông báo phù hợp
     throw new Error(errorMessage);
   }

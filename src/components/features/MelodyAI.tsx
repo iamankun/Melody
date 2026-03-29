@@ -50,7 +50,7 @@ export default function Melody({
 
   useEffect(() => {
     if (isLoading) {
-      setSpeed(0.5); // Slow down when loading
+      setSpeed(8); // Spin much faster when loading
     } else {
       // Speed up for 1 second, then return to normal
       setSpeed(5);
@@ -89,7 +89,10 @@ export default function Melody({
           <motion.div
             layout
             className="absolute inset-0 animate-spin"
-            style={{ animationDuration: '20s', animationDirection: 'reverse' }}
+            style={{ 
+              animationDuration: isLoading ? '2s' : '20s', 
+              animationDirection: 'reverse' 
+            }}
           >
             <svg viewBox="0 0 200 200" className="w-full h-full">
               <path

@@ -19,6 +19,7 @@ export const ChatInputSchema = z.object({
   prompt: z.string(),
   isAnKun: z.boolean().optional(),
   generateAudio: z.boolean().optional().default(false).describe('Liệu có nên tạo âm thanh cho phản hồi hay không.'),
+  model: z.string().optional().default('ollama/llama3').describe('Model AI để sử dụng'),
 });
 export type ChatInput = z.infer<typeof ChatInputSchema>;
 

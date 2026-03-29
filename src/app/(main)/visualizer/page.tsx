@@ -38,7 +38,7 @@ export default function VisualizerPage() {
     const checkMicPermission = async () => {
         if (navigator.permissions) {
             try {
-                const permissionStatus = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+                const permissionStatus = await navigator.permissions.query({ name: 'microphone' as any });
                 setMicPermission(permissionStatus.state);
                 permissionStatus.onchange = () => setMicPermission(permissionStatus.state);
             } catch (err) {

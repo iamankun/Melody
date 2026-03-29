@@ -9,13 +9,10 @@ import { YoutubeLogo } from "@/components/shared/youtube-logo";
 
 export function AppHeader() {
   return (
-    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6">
+    <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 bg-background/80 px-4 backdrop-blur-sm sm:px-6">
       <div className="flex items-center gap-4">
         <Link href="/melody-ai" className="flex items-center gap-2.5">
           <Logo className="w-8 h-8" />
-          <span className="hidden font-semibold sm:block text-2xl">
-            Melody AI
-          </span>
         </Link>
       </div>
       <nav className="flex items-center gap-2">

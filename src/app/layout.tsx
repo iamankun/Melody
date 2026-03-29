@@ -17,7 +17,7 @@ export default function RootLayout({
         <title>Melody AI - Chàng Trai Giai Điệu</title>
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="localhost" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           href="https://fonts.googleapis.com/css2?family=Dosis:wght@400;500;600;700&display=swap"
           rel="stylesheet"
