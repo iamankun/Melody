@@ -8,7 +8,7 @@ import { CornerDownLeft, Loader2, User, X, Mic, Circle } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 
 import Melody from '@/components/features/MelodyAI';
-import { chat } from "@/ai/flows/chat";
+import { chat, checkGeminiAvailability } from "@/ai/flows/chat";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
@@ -40,6 +40,7 @@ export default function MelodyAIChatPage() {
   const [isAnKun, setIsAnKun] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [selectedModel, setSelectedModel] = useState('ollama/llama3');
+  const [geminiAvailable, setGeminiAvailable] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const promptTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -58,6 +59,12 @@ export default function MelodyAIChatPage() {
     if (anKunStatus === 'true') {
       setIsAnKun(true);
     }
+    
+    // Check if Gemini is available
+    checkGeminiAvailability().then(available => {
+      setGeminiAvailable(available);
+      console.log('Gemini available:', available);
+    });
   }, []);
 
   useEffect(() => {
@@ -335,6 +342,7 @@ export default function MelodyAIChatPage() {
                   onModelChange={setSelectedModel}
                   disabled={isSubmitting}
                   className="w-48"
+                  geminiAvailable={geminiAvailable}
                 />
                  <AudioRecorder
                     mode="identify"

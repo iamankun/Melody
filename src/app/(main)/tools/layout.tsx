@@ -1,3 +1,5 @@
+'use client';
+
 import {AppHeader} from '@/components/layout/app-header';
 import {MusicPlayer} from '@/components/features/music-player';
 import {SidebarNav} from '@/components/layout/sidebar-nav';

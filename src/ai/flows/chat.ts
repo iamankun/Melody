@@ -24,6 +24,17 @@ import { knowledgeBase } from '../LLMs';
 import { updateKnowledgeBase } from './update-knowledge-base';
 import { textToSpeech } from './text-to-speech';
 import { identifySongFromAudio } from './identify-song-from-audio';
+import { isGeminiAvailable, geminiModelName } from '../genkit';
+
+// Export function to check Gemini availability
+export async function checkGeminiAvailability(): Promise<boolean> {
+  return isGeminiAvailable;
+}
+
+// Export đúng tên model để dùng trong UI
+export async function getGeminiModelName(): Promise<string> {
+  return geminiModelName;
+}
 
 const musicIdeaTool = ai.defineTool(
   {
@@ -355,6 +366,20 @@ ${knowledgeBase}
     if (errorMessage.includes("GEMINI_API_KEY") || errorMessage.includes("GOOGLE_API_KEY") || errorMessage.includes("API key")) {
       return { 
         response: "Model Google AI (Gemini) yêu cầu API key. Vui lòng cấu hình GEMINI_API_KEY hoặc GOOGLE_API_KEY trong file .env.local. Hiện tại đang sử dụng model Llama 3 (Local)." 
+      };
+    }
+    
+    // Nếu lỗi là do model không tìm thấy hoặc plugin chưa load
+    if (errorMessage.includes("Model") && (errorMessage.includes("not found") || errorMessage.includes("not available") || errorMessage.includes("did not match"))) {
+      return { 
+        response: `Model ${model} hiện không khả dụng. Vui lòng chọn model khác hoặc kiểm tra cấu hình.` 
+      };
+    }
+    
+    // Nếu lỗi là do plugin chưa được load (Google AI)
+    if (errorMessage.includes("googleai") || errorMessage.includes("google") || errorMessage.includes("genai")) {
+      return { 
+        response: "Model Google AI chưa được cấu hình. Vui lòng chọn model Local (Llama 3, Gemma) hoặc thêm GEMINI_API_KEY vào .env.local." 
       };
     }
     

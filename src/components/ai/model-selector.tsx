@@ -45,7 +45,7 @@ const availableModels: Model[] = [
 
 // Gemini model chỉ thêm nếu có API key
 const geminiModel: Model = {
-  id: 'googleai/gemini-1.5-flash',
+  id: 'googleai/gemini-1.5-flash-latest',
   name: 'Gemini 1.5 Flash',
   provider: 'cloud',
   description: 'Model cloud của Google, thông minh và nhanh',
