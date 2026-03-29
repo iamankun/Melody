@@ -20,7 +20,7 @@ import {changeTheme} from './change-theme';
 import {generateAndPlayMusic} from './generate-and-play-music';
 import {customIntelligence} from './custom-intelligence';
 import type {ChatInput, ChatOutput} from './chat.schema';
-import { knowledgeBase } from '../LLMs';
+import { loadKnowledgeBase } from '../LLMs';
 import { updateKnowledgeBase } from './update-knowledge-base';
 import { textToSpeech } from './text-to-speech';
 import { identifySongFromAudio } from './identify-song-from-audio';
@@ -206,6 +206,9 @@ async function getAnKunChatHistory(): Promise<string> {
 
 export async function chat(input: ChatInput): Promise<ChatOutput> {
   const {history, prompt, isAnKun, generateAudio, model = 'ollama/llama3'} = input;
+
+  // Tải cơ sở kiến thức (chỉ chạy trên server)
+  const knowledgeBase = await loadKnowledgeBase();
 
   // Ghi lại toàn bộ cuộc trò chuyện hiện tại (bao gồm tin nhắn mới nhất) nếu là An Kun
   const fullHistory = [...history, { role: 'user', content: prompt }];

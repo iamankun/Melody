@@ -3,7 +3,7 @@
 
 import { PulsingBorder } from "@paper-design/shaders-react"
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 function isWebGLSupported(): boolean {
   if (typeof window === 'undefined') {
@@ -41,18 +41,38 @@ export default function Melody({
   const [webglSupported, setWebglSupported] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [speed, setSpeed] = useState(1.5)
+  const [frame, setFrame] = useState(0)
+  const frameRef = useRef(0)
+  const rafRef = useRef<number>()
 
   useEffect(() => {
-    // This effect runs only on the client, after the component has mounted.
     setIsClient(true)
     setWebglSupported(isWebGLSupported());
   }, [])
 
+  // Animation frame loop để cập nhật shader
+  useEffect(() => {
+    if (!isClient || !webglSupported) return;
+
+    const animate = () => {
+      frameRef.current += speed * 0.016; // Tăng frame theo speed và delta time
+      setFrame(frameRef.current);
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, [isClient, webglSupported, speed]);
+
   useEffect(() => {
     if (isLoading) {
-      setSpeed(8); // Spin much faster when loading
+      setSpeed(8);
     } else {
-      // Speed up for 1 second, then return to normal
       setSpeed(5);
       const timer = setTimeout(() => {
         setSpeed(1.5);
@@ -128,7 +148,7 @@ export default function Melody({
             smokeSize={4}
             scale={0.65}
             rotation={0}
-            frame={9161408.251009725}
+            frame={frame}
             style={{
               width: `${size}px`,
               height: `${size}px`,

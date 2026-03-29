@@ -1,15 +1,14 @@
 // Trong file src/ai/genkit.ts hoặc nơi bạn cấu hình Genkit
 import { genkit } from 'genkit';
 import { ollama } from 'genkitx-ollama';
-import { googleAI } from '@genkit-ai/google-genai';
+import { googleAI } from '@genkit-ai/googleai' // Đổi từ google-genai sang googleai
 
 // Debug: Kiểm tra tất cả env variables
 console.log('=== ENV DEBUG ===');
 console.log('process.env keys:', Object.keys(process.env).filter(k => k.includes('GEMINI') || k.includes('GOOGLE') || k.includes('API')));
 console.log('GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
-console.log('GOOGLE_API_KEY exists:', !!process.env.GOOGLE_API_KEY);
 
-// Lấy API key từ env - Next.js tự động load từ .env.local
+// Lấy API key từ env - Next.js tự động load từ .env.locals
 export const GEMINI_API_KEY = process.env.GEMINI_API_KEY ||'';
 
 // Debug: Log để kiểm tra (chỉ log có/không, không log giá trị)
@@ -42,6 +41,7 @@ if (GEMINI_API_KEY) {
 
 export const ai = genkit({
   plugins: plugins,
+  model: GEMINI_API_KEY ? 'googleai/gemini-1.5-flash-latest' : 'sorc/qwen3.5-claude-4.6-opus', // Thêm dòng này
 });
 
 // Export model name đúng chuẩn để dùng trong chat
