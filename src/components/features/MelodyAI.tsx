@@ -1,9 +1,8 @@
+"use client";
 
-"use client"
-
+import React, { useEffect, useRef, useState, type JSX } from "react";
 import { PulsingBorder } from "@paper-design/shaders-react"
 import { motion } from "framer-motion"
-import { useEffect, useRef, useState } from "react"
 
 function isWebGLSupported(): boolean {
   if (typeof window === 'undefined') {
@@ -148,7 +147,7 @@ export default function Melody({
             smokeSize={4}
             scale={0.65}
             rotation={0}
-            frame={frame}
+            frame={9161408.251009725}
             style={{
               width: `${size}px`,
               height: `${size}px`,
